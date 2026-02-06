@@ -124,6 +124,93 @@
             height: 24px;
         }
 
+        /* Screenshots */
+        .screenshots {
+            padding: 60px 0;
+        }
+
+        .screenshots h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .platform-group {
+            margin-bottom: 48px;
+        }
+
+        .platform-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .platform-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .platform-label svg {
+            flex-shrink: 0;
+        }
+
+        .screenshot-row {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .screenshot-item {
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .screenshot-item img {
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .screenshot-item.iphone img {
+            height: 500px;
+            width: auto;
+        }
+
+        .screenshot-item.ipad img {
+            height: 380px;
+            width: auto;
+        }
+
+        .screenshot-caption {
+            margin-top: 12px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .screenshot-row {
+                justify-content: flex-start;
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .screenshot-item.iphone img {
+                height: 400px;
+            }
+
+            .screenshot-item.ipad img {
+                height: 280px;
+            }
+        }
+
         /* Features */
         .features {
             padding: 60px 0;
@@ -313,6 +400,60 @@
             </a>
         </div>
     </header>
+
+    <section class="screenshots">
+        <div class="container">
+            <h2>See It in Action</h2>
+
+            <div class="platform-group">
+                <div class="platform-label">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                        <line x1="12" y1="18" x2="12.01" y2="18"/>
+                    </svg>
+                    iPhone
+                </div>
+                <div class="screenshot-row">
+                    <div class="screenshot-item iphone">
+                        <img src="screenshots/iphone-mode-selection.png" alt="iPhone - Mode Selection screen showing Tone, CW, and Message options">
+                        <div class="screenshot-caption">Mode Selection</div>
+                    </div>
+                    <div class="screenshot-item iphone">
+                        <img src="screenshots/iphone-tone.png" alt="iPhone - Tone mode with frequency slider and cadence controls">
+                        <div class="screenshot-caption">Tone Generator</div>
+                    </div>
+                    <div class="screenshot-item iphone">
+                        <img src="screenshots/iphone-message.png" alt="iPhone - Voice Message mode with recording list and loop controls">
+                        <div class="screenshot-caption">Voice Message</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="platform-group">
+                <div class="platform-label">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="2" y1="20" x2="22" y2="20"/>
+                    </svg>
+                    iPad
+                </div>
+                <div class="screenshot-row">
+                    <div class="screenshot-item ipad">
+                        <img src="screenshots/ipad-tone.png" alt="iPad - Tone mode with sidebar navigation and frequency controls">
+                        <div class="screenshot-caption">Tone Generator</div>
+                    </div>
+                    <div class="screenshot-item ipad">
+                        <img src="screenshots/ipad-cw.png" alt="iPad - CW mode with Morse code message input and speed controls">
+                        <div class="screenshot-caption">CW (Morse Code)</div>
+                    </div>
+                    <div class="screenshot-item ipad">
+                        <img src="screenshots/ipad-message.png" alt="iPad - Voice Message mode with recording management">
+                        <div class="screenshot-caption">Voice Message</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="features">
         <div class="container">

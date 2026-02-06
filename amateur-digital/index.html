@@ -217,6 +217,90 @@
         .mode-item.qpsk31 { border-top: 4px solid var(--secondary); }
         .mode-item.qpsk63 { border-top: 4px solid #5856D6; }
 
+        /* Screenshots */
+        .screenshots {
+            padding: 60px 0;
+        }
+
+        .screenshots h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .platform-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        .platform-tab {
+            padding: 10px 24px;
+            border-radius: 20px;
+            border: 2px solid var(--text-secondary);
+            background: transparent;
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .platform-tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .platform-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .platform-gallery {
+            display: none;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .platform-gallery.active {
+            display: flex;
+        }
+
+        .platform-gallery img {
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .platform-gallery.iphone img {
+            height: 500px;
+            width: auto;
+        }
+
+        .platform-gallery.ipad img {
+            width: min(100%, 560px);
+            height: auto;
+        }
+
+        .platform-gallery.mac img {
+            width: min(100%, 560px);
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .platform-gallery.iphone img {
+                height: 400px;
+            }
+
+            .platform-gallery.ipad img,
+            .platform-gallery.mac img {
+                width: 100%;
+            }
+        }
+
         /* Requirements */
         .requirements {
             padding: 60px 0;
@@ -383,6 +467,32 @@
         </div>
     </section>
 
+    <section class="screenshots">
+        <div class="container">
+            <h2>Screenshots</h2>
+            <div class="platform-tabs">
+                <button class="platform-tab active" data-platform="iphone">iPhone</button>
+                <button class="platform-tab" data-platform="ipad">iPad</button>
+                <button class="platform-tab" data-platform="mac">Mac</button>
+            </div>
+            <div class="platform-gallery iphone active" data-platform="iphone">
+                <img src="screenshots/iphone-01-modes.png" alt="Mode selection on iPhone" loading="lazy">
+                <img src="screenshots/iphone-02-rtty.png" alt="RTTY transmitting on iPhone" loading="lazy">
+                <img src="screenshots/iphone-03-sent.png" alt="Message sent on iPhone" loading="lazy">
+            </div>
+            <div class="platform-gallery ipad" data-platform="ipad">
+                <img src="screenshots/ipad-01-modes.png" alt="Mode selection on iPad" loading="lazy">
+                <img src="screenshots/ipad-02-transmitting.png" alt="PSK31 transmitting on iPad" loading="lazy">
+                <img src="screenshots/ipad-03-settings.png" alt="Settings on iPad" loading="lazy">
+            </div>
+            <div class="platform-gallery mac" data-platform="mac">
+                <img src="screenshots/mac-01-modes.png" alt="Mode selection on Mac" loading="lazy">
+                <img src="screenshots/mac-02-transmitting.png" alt="PSK31 transmitting on Mac" loading="lazy">
+                <img src="screenshots/mac-03-settings.png" alt="Settings on Mac" loading="lazy">
+            </div>
+        </div>
+    </section>
+
     <section class="requirements">
         <div class="container">
             <h2>What You Need</h2>
@@ -428,6 +538,17 @@
 
         // Replace # with actual App Store link when available
         // appStoreLink.href = 'https://apps.apple.com/app/amateur-digital/id...';
+
+        // Platform screenshot tabs
+        document.querySelectorAll('.platform-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const platform = tab.dataset.platform;
+                document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.platform-gallery').forEach(g => g.classList.remove('active'));
+                tab.classList.add('active');
+                document.querySelector(`.platform-gallery[data-platform="${platform}"]`).classList.add('active');
+            });
+        });
 
         if (!isIOS) {
             appStoreLink.innerHTML = `
