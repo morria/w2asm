@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Amateur Radio Beacon</title>
+    <meta name="description" content="Get help and support for Amateur Radio Beacon iOS app.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="app-icon.png">
+    <link rel="apple-touch-icon" href="app-icon.png">
+
+    <style>
+        :root {
+            --primary: #007AFF;
+            --secondary: #5856D6;
+            --orange: #FF6B4A;
+            --teal: #2D9596;
+            --green: #34C759;
+            --background: #F2F2F7;
+            --card-bg: #FFFFFF;
+            --text: #1C1C1E;
+            --text-secondary: #8E8E93;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #1C1C1E;
+                --card-bg: #2C2C2E;
+                --text: #FFFFFF;
+                --text-secondary: #8E8E93;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1rem;
+            margin-bottom: 24px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        .content {
+            padding: 40px 0 60px;
+        }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .support-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .support-card .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .support-card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+
+        .support-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .support-card a.btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .support-card a.btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+
+        .support-card a.btn.secondary {
+            background: var(--card-bg);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .faq {
+            margin-top: 48px;
+        }
+
+        .faq h2 {
+            font-size: 1.75rem;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .faq-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .faq-item {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--background);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .faq-item:first-child {
+            padding-top: 0;
+        }
+
+        .faq-item h3 {
+            font-size: 1.125rem;
+            margin-bottom: 8px;
+        }
+
+        .faq-item p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .support-card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to Amateur Radio Beacon</a>
+            <h1>Support</h1>
+            <p class="subtitle">We're here to help</p>
+        </div>
+    </header>
+
+    <section class="content">
+        <div class="container">
+            <div class="support-grid">
+                <div class="support-card">
+                    <div class="icon">@</div>
+                    <h2>Email Support</h2>
+                    <p>Have a question or need help? Send us an email and we'll get back to you.</p>
+                    <a href="#" class="btn" id="email-link">Contact via Email</a>
+                </div>
+                <div class="support-card">
+                    <div class="icon">&lt;/&gt;</div>
+                    <h2>GitHub Issues</h2>
+                    <p>Found a bug or have a feature request? Open an issue on GitHub.</p>
+                    <a href="https://github.com/morria/Amateur-Radio-Beacon/issues" class="btn secondary">Open an Issue</a>
+                </div>
+            </div>
+
+            <div class="faq">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-card">
+                    <div class="faq-item">
+                        <h3>How do I connect the app to my radio?</h3>
+                        <p>Connect your iPhone or iPad's audio output to your transceiver's audio input jack using an appropriate cable. Configure your radio's VOX to key from the audio input, and the beacon will transmit automatically when audio plays.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Do I need a license to use this app?</h3>
+                        <p>You need a valid amateur radio license to transmit. The app itself only generates audio—you're responsible for ensuring your transmissions comply with your license class and local regulations.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Why does the app need microphone access?</h3>
+                        <p>Microphone access is only used for recording voice messages in Message mode. These recordings are stored locally on your device and are never uploaded anywhere.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Can I run the beacon while using other apps?</h3>
+                        <p>Yes! The app supports background audio, so your beacon continues running even when you switch to other apps or lock your device.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>What tone frequency should I use?</h3>
+                        <p>Common frequencies are 400 Hz, 700 Hz, and 1000 Hz. The best frequency depends on your radio's audio passband and your intended use. For antenna tuning, any frequency within your radio's audio range works well.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Amateur Radio Beacon</p>
+            <p style="margin-top: 8px; font-size: 0.875rem;">73 de W2ASM</p>
+        </div>
+    </footer>
+
+    <script>
+        // Obfuscated email to prevent spam harvesting
+        (function() {
+            var a = 'w2asm';
+            var b = 'arrl';
+            var c = 'net';
+            var addr = a + '@' + b + '.' + c;
+            var link = document.getElementById('email-link');
+            link.href = 'mai' + 'lto:' + addr;
+        })();
+    </script>
+</body>
+</html>

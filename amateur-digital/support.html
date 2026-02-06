@@ -125,7 +125,7 @@
         <div class="contact-card">
             <h3>Email Support</h3>
             <p>For general questions or support, send an email to:</p>
-            <a href="mailto:support@w2asm.com" class="button">support@w2asm.com</a>
+            <a id="email-link" class="button" href="#">Loading...</a>
         </div>
 
         <h2>Frequently Asked Questions</h2>
@@ -175,5 +175,15 @@
             73 de W2ASM
         </p>
     </div>
+    <script>
+        (function() {
+            var u = 'w2asm';
+            var d = 'arrl.net';
+            var a = u + '@' + d;
+            var el = document.getElementById('email-link');
+            el.href = 'mai' + 'lto:' + a;
+            el.textContent = a;
+        })();
+    </script>
 </body>
 </html>
