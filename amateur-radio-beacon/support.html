@@ -86,12 +86,6 @@
             padding: 40px 0 60px;
         }
 
-        .support-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-        }
-
         .support-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -129,12 +123,6 @@
         .support-card a.btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-        }
-
-        .support-card a.btn.secondary {
-            background: var(--card-bg);
-            color: var(--primary);
-            border: 2px solid var(--primary);
         }
 
         .faq {
@@ -209,25 +197,17 @@
         <div class="container">
             <a href="index.html" class="back-link">← Back to Amateur Radio Beacon</a>
             <h1>Support</h1>
-            <p class="subtitle">We're here to help</p>
+            <p class="subtitle">Get help on GitHub</p>
         </div>
     </header>
 
     <section class="content">
         <div class="container">
-            <div class="support-grid">
-                <div class="support-card">
-                    <div class="icon">@</div>
-                    <h2>Email Support</h2>
-                    <p>Have a question or need help? Send us an email and we'll get back to you.</p>
-                    <a href="#" class="btn" id="email-link">Contact via Email</a>
-                </div>
-                <div class="support-card">
-                    <div class="icon">&lt;/&gt;</div>
-                    <h2>GitHub Issues</h2>
-                    <p>Found a bug or have a feature request? Open an issue on GitHub.</p>
-                    <a href="https://github.com/morria/Amateur-Radio-Beacon/issues" class="btn secondary">Open an Issue</a>
-                </div>
+            <div class="support-card" style="max-width: 480px; margin: 0 auto;">
+                <div class="icon">&lt;/&gt;</div>
+                <h2>GitHub Issues</h2>
+                <p>Have a question, found a bug, or have a feature request? Open an issue on GitHub and we'll get back to you.</p>
+                <a href="https://github.com/morria/Amateur-Radio-Beacon/issues" class="btn">Open an Issue</a>
             </div>
 
             <div class="faq">
@@ -265,16 +245,5 @@
         </div>
     </footer>
 
-    <script>
-        // Obfuscated email to prevent spam harvesting
-        (function() {
-            var a = 'w2asm';
-            var b = 'arrl';
-            var c = 'net';
-            var addr = a + '@' + b + '.' + c;
-            var link = document.getElementById('email-link');
-            link.href = 'mai' + 'lto:' + addr;
-        })();
-    </script>
 </body>
 </html>
