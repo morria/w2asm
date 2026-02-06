@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amateur Radio Beacon - Tone, CW & Voice Beacon for iPhone & iPad</title>
+    <meta name="description" content="Turn your iPhone into a ham radio beacon station. Generate tones for antenna tuning, transmit CW, or loop voice messages—all with adjustable cadence.">
+    <meta name="keywords" content="amateur radio, ham radio, beacon, CW, Morse code, tone generator, iOS app, iPhone, iPad, radio beacon, amateur beacon, ham radio app, voice beacon">
+    <meta name="author" content="Amateur Radio Beacon">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Amateur Radio Beacon - Beacon Audio Generator for iOS">
+    <meta property="og:description" content="Turn your iPhone into a ham radio beacon station. Generate tones, transmit CW, or loop voice messages.">
+    <meta property="og:image" content="app-icon.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Amateur Radio Beacon - Beacon Audio Generator">
+    <meta name="twitter:description" content="Turn your iPhone into a ham radio beacon station. Generate tones, transmit CW, or loop voice messages.">
+    <meta name="twitter:image" content="app-icon.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="app-icon.png">
+    <link rel="apple-touch-icon" href="app-icon.png">
+
+    <style>
+        :root {
+            --primary: #007AFF;
+            --secondary: #5856D6;
+            --orange: #FF6B4A;
+            --teal: #2D9596;
+            --green: #34C759;
+            --background: #F2F2F7;
+            --card-bg: #FFFFFF;
+            --text: #1C1C1E;
+            --text-secondary: #8E8E93;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #1C1C1E;
+                --card-bg: #2C2C2E;
+                --text: #FFFFFF;
+                --text-secondary: #8E8E93;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 27%;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--text);
+            color: var(--background);
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Features */
+        .features {
+            padding: 60px 0;
+        }
+
+        .features h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+        }
+
+        /* Modes Section */
+        .modes {
+            padding: 60px 0;
+        }
+
+        .modes h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .modes-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+        }
+
+        .mode-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .mode-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .mode-item h4 {
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+        }
+
+        .mode-item .desc {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .mode-item.tone { border-top: 4px solid var(--teal); }
+        .mode-item.cw { border-top: 4px solid var(--secondary); }
+        .mode-item.message { border-top: 4px solid var(--orange); }
+
+        /* Notice */
+        .notice {
+            padding: 60px 0;
+            background: var(--card-bg);
+        }
+
+        .notice h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .notice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .notice-item {
+            text-align: center;
+        }
+
+        .notice-item .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .notice-item h4 {
+            margin-bottom: 8px;
+        }
+
+        .notice-item p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-links {
+            margin-top: 24px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 60px 0 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .tagline {
+                font-size: 1.125rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="app-icon">
+                <img src="app-icon.png" alt="Amateur Radio Beacon App Icon">
+            </div>
+            <h1>Amateur Radio Beacon</h1>
+            <p class="tagline">Turn your iPhone into a ham radio beacon station. Generate tones, transmit CW, or loop voice messages—all with adjustable cadence.</p>
+            <a href="#" class="download-btn" id="app-store-link">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                Coming Soon to the App Store
+            </a>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2>Built for Ham Radio Operators</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(45, 149, 150, 0.15);">~</div>
+                    <h3>Adjustable Tone Generator</h3>
+                    <p>Generate pure sine wave tones from 200 Hz to 2000 Hz. Perfect for transmitter testing and beacon identification.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(88, 86, 214, 0.15);">-.-</div>
+                    <h3>Morse Code (CW)</h3>
+                    <p>Convert any text to Morse code audio. Adjustable speed from 5 to 40 WPM with live preview.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(255, 107, 74, 0.15);">O</div>
+                    <h3>Voice Messages</h3>
+                    <p>Record and loop voice messages for beacon identification. Store multiple recordings on device.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(52, 199, 89, 0.15);">R</div>
+                    <h3>Flexible Cadence Control</h3>
+                    <p>Configure continuous transmission or timed intervals. Adjustable pause duration from 1 to 300 seconds.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(0, 122, 255, 0.15);">B</div>
+                    <h3>Background Audio</h3>
+                    <p>Keep your beacon running while using other apps. Audio continues in the background.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(255, 149, 0, 0.15);">P</div>
+                    <h3>Privacy Focused</h3>
+                    <p>No data collection, no analytics. All recordings stay on your device. Your privacy is protected.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="modes">
+        <div class="container">
+            <h2>Three Beacon Modes</h2>
+            <p class="modes-subtitle">Choose the right mode for your beacon station</p>
+            <div class="mode-list">
+                <div class="mode-item tone">
+                    <h4>Tone</h4>
+                    <span class="desc">Continuous sine wave at adjustable frequency</span>
+                </div>
+                <div class="mode-item cw">
+                    <h4>CW (Morse Code)</h4>
+                    <span class="desc">Text converted to Morse code audio</span>
+                </div>
+                <div class="mode-item message">
+                    <h4>Voice Message</h4>
+                    <span class="desc">Record and loop voice announcements</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="notice">
+        <div class="container">
+            <h2>Important Information</h2>
+            <div class="notice-grid">
+                <div class="notice-item">
+                    <div class="icon">O</div>
+                    <h4>Audio Simulator</h4>
+                    <p>This app generates audio signals only. Connect to your transmitter's audio input for RF transmission.</p>
+                </div>
+                <div class="notice-item">
+                    <div class="icon">I</div>
+                    <h4>License Required</h4>
+                    <p>Operating a radio transmitter requires an amateur radio license. Ensure compliance with local regulations.</p>
+                </div>
+                <div class="notice-item">
+                    <div class="icon">C</div>
+                    <h4>FCC Part 97</h4>
+                    <p>In the US, beacon stations must comply with FCC Part 97 regulations. Know your responsibilities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Amateur Radio Beacon is free and open source.</p>
+            <p>Designed for licensed amateur radio operators.</p>
+            <div class="footer-links">
+                <a href="https://github.com/morria/Amateur-Radio-Beacon">GitHub</a>
+                <a href="https://w2asm.com/Amateur-Radio-Beacon/Support">Support</a>
+                <a href="https://github.com/morria/Amateur-Radio-Beacon/blob/main/PRIVACY_POLICY.md">Privacy Policy</a>
+            </div>
+            <p style="margin-top: 32px; font-size: 0.875rem;">
+                73 de W2ASM
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Detect iOS and update App Store link
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const appStoreLink = document.getElementById('app-store-link');
+
+        // Replace # with actual App Store link when available
+        // appStoreLink.href = 'https://apps.apple.com/app/amateur-radio-beacon/id...';
+
+        if (!isIOS) {
+            appStoreLink.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                Coming Soon to the App Store
+            `;
+        }
+    </script>
+</body>
+</html>

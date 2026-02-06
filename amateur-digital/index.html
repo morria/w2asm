@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amateur Digital - RTTY, PSK31 & Digital Modes for iPhone & iPad</title>
+    <meta name="description" content="Amateur Digital is a free iOS app for ham radio digital modes including RTTY, PSK31, BPSK63, QPSK31, and QPSK63. Decode and transmit digital signals with an iMessage-style interface.">
+    <meta name="keywords" content="amateur radio, ham radio, RTTY, PSK31, digital modes, iOS app, iPhone, iPad, radio teletype, phase shift keying, HF digital, amateur digital modes, Baudot, Varicode, USB soundcard, ham radio app">
+    <meta name="author" content="Amateur Digital">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Amateur Digital - Ham Radio Digital Modes for iOS">
+    <meta property="og:description" content="Free iOS app for RTTY, PSK31, and other digital modes. Decode and transmit with an iMessage-style interface.">
+    <meta property="og:url" content="https://amateurdigital.app">
+    <meta property="og:image" content="app-icon.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Amateur Digital - Ham Radio Digital Modes">
+    <meta name="twitter:description" content="Free iOS app for RTTY, PSK31, BPSK63, QPSK31, and QPSK63 digital modes.">
+    <meta name="twitter:image" content="app-icon.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="app-icon.png">
+    <link rel="apple-touch-icon" href="app-icon.png">
+
+    <style>
+        :root {
+            --primary: #007AFF;
+            --secondary: #5856D6;
+            --orange: #FF9500;
+            --green: #34C759;
+            --background: #F2F2F7;
+            --card-bg: #FFFFFF;
+            --text: #1C1C1E;
+            --text-secondary: #8E8E93;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #1C1C1E;
+                --card-bg: #2C2C2E;
+                --text: #FFFFFF;
+                --text-secondary: #8E8E93;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 27%;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--text);
+            color: var(--background);
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Features */
+        .features {
+            padding: 60px 0;
+        }
+
+        .features h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+        }
+
+        /* Modes Section */
+        .modes {
+            padding: 60px 0;
+        }
+
+        .modes h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .modes-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+        }
+
+        .mode-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .mode-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .mode-item h4 {
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+        }
+
+        .mode-item .baud {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .mode-item.rtty { border-top: 4px solid var(--orange); }
+        .mode-item.psk31 { border-top: 4px solid var(--primary); }
+        .mode-item.bpsk63 { border-top: 4px solid #5AC8FA; }
+        .mode-item.qpsk31 { border-top: 4px solid var(--secondary); }
+        .mode-item.qpsk63 { border-top: 4px solid #5856D6; }
+
+        /* Requirements */
+        .requirements {
+            padding: 60px 0;
+            background: var(--card-bg);
+        }
+
+        .requirements h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .req-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .req-item {
+            text-align: center;
+        }
+
+        .req-item .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .req-item h4 {
+            margin-bottom: 8px;
+        }
+
+        .req-item p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-links {
+            margin-top: 24px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 60px 0 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .tagline {
+                font-size: 1.125rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="app-icon">
+                <img src="app-icon.png" alt="Amateur Digital App Icon">
+            </div>
+            <h1>Amateur Digital</h1>
+            <p class="tagline">Decode and transmit RTTY, PSK31, and other digital modes on your iPhone or iPad</p>
+            <a href="#" class="download-btn" id="app-store-link">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                Download on the App Store
+            </a>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2>Built for Ham Radio Operators</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(255, 149, 0, 0.15);">📡</div>
+                    <h3>Multi-Channel Decoding</h3>
+                    <p>Monitor multiple frequencies simultaneously. Automatically detects and decodes signals across the audio passband.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(0, 122, 255, 0.15);">💬</div>
+                    <h3>iMessage-Style Interface</h3>
+                    <p>Familiar chat interface with message bubbles. Swipe to reveal timestamps, tap to transmit.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(88, 86, 214, 0.15);">📍</div>
+                    <h3>Automatic Grid Square</h3>
+                    <p>Uses GPS to automatically determine your Maidenhead grid locator. Perfect for portable operation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(52, 199, 89, 0.15);">🔊</div>
+                    <h3>USB Audio Interface</h3>
+                    <p>Works with external USB soundcards connected between your iPhone and radio. Full duplex operation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(90, 200, 250, 0.15);">☁️</div>
+                    <h3>iCloud Sync</h3>
+                    <p>Your settings sync automatically across all your devices via iCloud.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: rgba(255, 59, 48, 0.15);">📊</div>
+                    <h3>Band Frequency Reference</h3>
+                    <p>Built-in reference for digital mode calling frequencies on all HF bands from 160m to 6m.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="modes">
+        <div class="container">
+            <h2>Supported Digital Modes</h2>
+            <p class="modes-subtitle">Full transmit and receive support for popular amateur radio digital modes</p>
+            <div class="mode-list">
+                <div class="mode-item rtty">
+                    <h4>RTTY</h4>
+                    <span class="baud">45.45 / 50 / 75 Baud</span>
+                </div>
+                <div class="mode-item psk31">
+                    <h4>PSK31</h4>
+                    <span class="baud">31.25 Baud</span>
+                </div>
+                <div class="mode-item bpsk63">
+                    <h4>BPSK63</h4>
+                    <span class="baud">62.5 Baud</span>
+                </div>
+                <div class="mode-item qpsk31">
+                    <h4>QPSK31</h4>
+                    <span class="baud">31.25 Baud</span>
+                </div>
+                <div class="mode-item qpsk63">
+                    <h4>QPSK63</h4>
+                    <span class="baud">62.5 Baud</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="requirements">
+        <div class="container">
+            <h2>What You Need</h2>
+            <div class="req-grid">
+                <div class="req-item">
+                    <div class="icon">📱</div>
+                    <h4>iPhone or iPad</h4>
+                    <p>Requires iOS 17.0 or later. Works on iPhone and iPad.</p>
+                </div>
+                <div class="req-item">
+                    <div class="icon">🔌</div>
+                    <h4>USB Audio Interface</h4>
+                    <p>Any USB soundcard with Lightning or USB-C connection. Connects between your device and radio.</p>
+                </div>
+                <div class="req-item">
+                    <div class="icon">📻</div>
+                    <h4>HF Transceiver</h4>
+                    <p>Any amateur radio transceiver with SSB capability. Use USB mode on all HF bands.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Amateur Digital is free and open source.</p>
+            <p>Designed for licensed amateur radio operators.</p>
+            <div class="footer-links">
+                <a href="https://github.com/morria/Amateur-Digital">GitHub</a>
+                <a href="support.html">Support</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+            <p style="margin-top: 32px; font-size: 0.875rem;">
+                73 de W2ASM
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Detect iOS and update App Store link
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const appStoreLink = document.getElementById('app-store-link');
+
+        // Replace # with actual App Store link when available
+        // appStoreLink.href = 'https://apps.apple.com/app/amateur-digital/id...';
+
+        if (!isIOS) {
+            appStoreLink.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                Available on the App Store
+            `;
+        }
+    </script>
+</body>
+</html>
