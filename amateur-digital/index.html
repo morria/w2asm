@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amateur Digital - RTTY, PSK31 & Digital Modes for iPhone & iPad</title>
-    <meta name="description" content="Amateur Digital is a free iOS app for ham radio digital modes including RTTY, PSK31, BPSK63, QPSK31, and QPSK63. Decode and transmit digital signals with an iMessage-style interface.">
-    <meta name="keywords" content="amateur radio, ham radio, RTTY, PSK31, digital modes, iOS app, iPhone, iPad, radio teletype, phase shift keying, HF digital, amateur digital modes, Baudot, Varicode, USB soundcard, ham radio app">
+    <title>Amateur Digital - RTTY, PSK31, Rattlegram & Digital Modes for iPhone & iPad</title>
+    <meta name="description" content="Amateur Digital is a free iOS app for ham radio digital modes including RTTY, PSK31, BPSK63, QPSK31, QPSK63, and Rattlegram OFDM. Decode and transmit digital signals with an iMessage-style interface.">
+    <meta name="keywords" content="amateur radio, ham radio, RTTY, PSK31, Rattlegram, OFDM, digital modes, iOS app, iPhone, iPad, radio teletype, phase shift keying, HF digital, amateur digital modes, Baudot, Varicode, USB soundcard, ham radio app">
     <meta name="author" content="Amateur Digital">
 
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Amateur Digital - Ham Radio Digital Modes for iOS">
-    <meta property="og:description" content="Free iOS app for RTTY, PSK31, and other digital modes. Decode and transmit with an iMessage-style interface.">
+    <meta property="og:description" content="Free iOS app for RTTY, PSK31, Rattlegram OFDM, and other digital modes. Decode and transmit with an iMessage-style interface.">
     <meta property="og:url" content="https://amateurdigital.app">
     <meta property="og:image" content="app-icon.png">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Amateur Digital - Ham Radio Digital Modes">
-    <meta name="twitter:description" content="Free iOS app for RTTY, PSK31, BPSK63, QPSK31, and QPSK63 digital modes.">
+    <meta name="twitter:description" content="Free iOS app for RTTY, PSK31, BPSK63, QPSK31, QPSK63, and Rattlegram OFDM digital modes.">
     <meta name="twitter:image" content="app-icon.png">
 
     <!-- Favicon -->
@@ -208,6 +208,14 @@
         .mode-item .baud {
             color: var(--text-secondary);
             font-size: 0.875rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .mode-item .mode-desc {
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            line-height: 1.5;
         }
 
         .mode-item.rtty { border-top: 4px solid var(--orange); }
@@ -215,6 +223,68 @@
         .mode-item.bpsk63 { border-top: 4px solid #5AC8FA; }
         .mode-item.qpsk31 { border-top: 4px solid var(--secondary); }
         .mode-item.qpsk63 { border-top: 4px solid #5856D6; }
+        .mode-item.rattlegram { border-top: 4px solid #30B0C7; }
+
+        .beta-badge {
+            display: inline-block;
+            background: var(--orange);
+            color: #fff;
+            font-size: 0.625rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+
+        .mode-group-label {
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            margin-top: 32px;
+        }
+
+        .mode-group-label:first-of-type {
+            margin-top: 0;
+        }
+
+        .experimental-note {
+            max-width: 600px;
+            margin: 40px auto 0;
+            padding: 24px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+
+        .experimental-note h4 {
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .experimental-note ol {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .experimental-note ol li {
+            margin-bottom: 6px;
+        }
+
+        .experimental-note code {
+            background: var(--background);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8125rem;
+        }
 
         /* Screenshots */
         .screenshots {
@@ -389,7 +459,7 @@
                 <img src="app-icon.png" alt="Amateur Digital App Icon">
             </div>
             <h1>Amateur Digital</h1>
-            <p class="tagline">Decode and transmit RTTY, PSK31, and other digital modes on your iPhone or iPad</p>
+            <p class="tagline">Decode and transmit RTTY, PSK31, Rattlegram, and other digital modes on your iPhone or iPad</p>
             <span class="download-btn" id="app-store-link">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
@@ -441,27 +511,53 @@
         <div class="container">
             <h2>Supported Digital Modes</h2>
             <p class="modes-subtitle">Full transmit and receive support for popular amateur radio digital modes</p>
-            <div class="mode-list">
+
+            <p class="mode-group-label">Core Mode</p>
+            <div class="mode-list" style="max-width: 360px;">
                 <div class="mode-item rtty">
                     <h4>RTTY</h4>
-                    <span class="baud">45.45 / 50 / 75 Baud</span>
+                    <span class="baud">45.45 / 50 / 75 / 100 Baud</span>
+                    <p class="mode-desc">Radio Teletype using FSK with Baudot encoding. The original digital mode, widely used in contests and DX. Configurable mark frequency, shift, and baud rate. Multi-channel decoder monitors 8 frequencies simultaneously.</p>
                 </div>
+            </div>
+
+            <p class="mode-group-label">Experimental Modes <span class="beta-badge">Beta</span></p>
+            <div class="mode-list" style="max-width: 1000px;">
                 <div class="mode-item psk31">
                     <h4>PSK31</h4>
-                    <span class="baud">31.25 Baud</span>
+                    <span class="baud">BPSK &middot; 31.25 Baud</span>
+                    <p class="mode-desc">Phase Shift Keying at 31.25 baud with Varicode encoding. Extremely narrowband (~31 Hz), ideal for low-power QRP operation on crowded bands.</p>
                 </div>
                 <div class="mode-item bpsk63">
                     <h4>BPSK63</h4>
-                    <span class="baud">62.5 Baud</span>
+                    <span class="baud">BPSK &middot; 62.5 Baud</span>
+                    <p class="mode-desc">Double-speed PSK31. Same BPSK modulation with twice the throughput, useful when band conditions are good and you want faster exchanges.</p>
                 </div>
                 <div class="mode-item qpsk31">
                     <h4>QPSK31</h4>
-                    <span class="baud">31.25 Baud</span>
+                    <span class="baud">QPSK &middot; 31.25 Baud</span>
+                    <p class="mode-desc">Quadrature PSK at 31.25 baud. Encodes 2 bits per symbol for double the data rate of PSK31 at the same bandwidth, with built-in Viterbi error correction.</p>
                 </div>
                 <div class="mode-item qpsk63">
                     <h4>QPSK63</h4>
-                    <span class="baud">62.5 Baud</span>
+                    <span class="baud">QPSK &middot; 62.5 Baud</span>
+                    <p class="mode-desc">Quadrature PSK at 62.5 baud. The fastest PSK variant, combining QPSK's 2 bits per symbol with higher baud rate for maximum throughput.</p>
                 </div>
+                <div class="mode-item rattlegram">
+                    <h4>Rattlegram</h4>
+                    <span class="baud">OFDM &middot; 170 bytes in ~1 second</span>
+                    <p class="mode-desc">OFDM burst mode with polar error-correction codes and CRC-32. Sends up to 170 bytes of UTF-8 text in a single ~1 second burst. Based on the open-source <a href="https://github.com/aicodix/rattlegram" style="color: #30B0C7;">Rattlegram</a> protocol.</p>
+                </div>
+            </div>
+
+            <div class="experimental-note">
+                <h4>Enabling Experimental Modes</h4>
+                <ol>
+                    <li>Open the app and tap the <strong>gear icon</strong> to open Settings</li>
+                    <li>Scroll to the <strong>Experimental Modes</strong> section</li>
+                    <li>Toggle on the modes you want to use (PSK31, BPSK63, QPSK31, QPSK63, or Rattlegram)</li>
+                    <li>Return to the mode selection screen &mdash; your enabled modes will appear alongside RTTY</li>
+                </ol>
             </div>
         </div>
     </section>
