@@ -1,60 +1,137 @@
-<html>
-	<head>
-	</head>
-	<body>
-		<h1>🐇 Hops</h1>
-		<p>Hops is a meshtastic bot that responds to dot commands.</p>
-		<ul>
-			<li>Located in Fort Greene, Brooklyn</li>
-			<li>Running off of a <a href="https://wiki.uniteng.com/en/meshtastic/station-g2">Station G2</a></li>
-			<li>Operated by me, <a href="https://w2asm.com">w2asm</a></li>
-			<li>I'm on LongFast in the East River mesh as <b>🪰 W2ASM-1</b></li>
-			<li>I'm on <a href="https://discord.com/invite/ktMAKGBnBs">the Meshtastic discord</a> as W2ASM in the <b>us - NYC metro</b> thread.</li>
-			<li>To run your own Hops bot, see <a href="https://github.com/morria/hops">the source code for Hops</a></li>
-		</ul>
-		<h2>Commands</h2>
-		<dl>
-			<dt>.help</dt>
-			<dd>
-				Get information on the bot (sends you here)
-				<i>Synonyms:.info, .?</i>
-			</dd>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Hops &mdash; W2ASM</title>
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
 
-			<dt>.whoami</dt>
-			<dd>
-				Node info as hops sees it
-			</dd>
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+			line-height: 1.6;
+			color: #1d1d1f;
+			background: #fff;
+			padding: 3rem 1.5rem;
+			max-width: 38rem;
+			margin: 0 auto;
+		}
 
-			<dt>.ping</dt>
-			<dd>
-				Sends a short ack.
-			</dd>
+		h1 {
+			font-size: 2.5rem;
+			font-weight: 700;
+			letter-spacing: -0.02em;
+			margin-bottom: 0.25rem;
+		}
 
-			<dt>.hello</dt>
-			<dd>
-				Say hello!
-				<i>Synonyms:.👋🏼</i>
-			</dd>
+		.subtitle {
+			color: #6e6e73;
+			font-size: 1.05rem;
+			margin-bottom: 2.5rem;
+		}
 
-			<dt>.message <short or long name> <message></dt>
-			<dd>
-				Send a message to the given user (by shortName or LongName)
-			</dd>
+		h2 {
+			font-size: 0.8rem;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.06em;
+			color: #86868b;
+			margin-bottom: 0.6rem;
+			margin-top: 2rem;
+		}
 
-			<dt>.mail</dt>
-			<dd>
-				Get your most recent 5 messages.
-			</dd>
+		ul {
+			list-style: none;
+			margin-bottom: 0.25rem;
+		}
 
-			<dt>.post Your message for the BBS</dt>
-			<dd>
-				Add an item to the global BBS
-			</dd>
+		li {
+			padding: 0.3rem 0;
+		}
 
-			<dt>.bbs</dt>
-			<dd>
-				List the most recent 5 BBS messages
-			</dd>
-		</dl>
-	</body>
+		a {
+			color: #06c;
+			text-decoration: none;
+		}
+
+		a:hover { text-decoration: underline; }
+
+		dl {
+			margin-top: 0.25rem;
+		}
+
+		dt {
+			font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+			font-size: 0.95rem;
+			font-weight: 600;
+			padding-top: 0.6rem;
+		}
+
+		dd {
+			color: #6e6e73;
+			font-size: 0.95rem;
+			padding-bottom: 0.4rem;
+		}
+
+		.back {
+			color: #6e6e73;
+			font-size: 0.9rem;
+			margin-top: 2.5rem;
+		}
+
+		@media (prefers-color-scheme: dark) {
+			body { background: #1d1d1f; color: #f5f5f7; }
+			h2 { color: #86868b; }
+			a { color: #2997ff; }
+			.subtitle, dd, .back { color: #86868b; }
+		}
+	</style>
+</head>
+<body>
+	<h1>Hops</h1>
+	<p class="subtitle">A Meshtastic bot that responds to dot commands</p>
+
+	<h2>About</h2>
+	<ul>
+		<li>Located in Fort Greene, Brooklyn</li>
+		<li>Running on a <a href="https://wiki.uniteng.com/en/meshtastic/station-g2">Station G2</a></li>
+		<li>On LongFast in the East River mesh as <b>🪰 W2ASM-1</b></li>
+		<li>Operated by <a href="https://w2asm.com">W2ASM</a></li>
+	</ul>
+
+	<h2>Commands</h2>
+	<dl>
+		<dt>.help</dt>
+		<dd>Get information on the bot (sends you here). Also: .info, .?</dd>
+
+		<dt>.whoami</dt>
+		<dd>Node info as Hops sees it</dd>
+
+		<dt>.ping</dt>
+		<dd>Sends a short ack</dd>
+
+		<dt>.hello</dt>
+		<dd>Say hello! Also: .👋🏼</dd>
+
+		<dt>.message &lt;name&gt; &lt;message&gt;</dt>
+		<dd>Send a message to a user by short or long name</dd>
+
+		<dt>.mail</dt>
+		<dd>Get your most recent 5 messages</dd>
+
+		<dt>.post &lt;message&gt;</dt>
+		<dd>Add a message to the global BBS</dd>
+
+		<dt>.bbs</dt>
+		<dd>List the most recent 5 BBS messages</dd>
+	</dl>
+
+	<h2>Links</h2>
+	<ul>
+		<li><a href="https://github.com/morria/hops">Source code on GitHub</a></li>
+		<li><a href="https://discord.com/invite/ktMAKGBnBs">Meshtastic Discord</a> &mdash; us - NYC metro thread</li>
+	</ul>
+
+	<p class="back"><a href="https://w2asm.com">&larr; W2ASM</a></p>
+</body>
 </html>
