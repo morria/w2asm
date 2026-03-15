@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Amateur Radio Log</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: #0a0a0a; color: #f0f0f0; line-height: 1.8;
+        }
+        a { color: #3b82f6; text-decoration: none; }
+        a:hover { color: #2563eb; }
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: rgba(10,10,10,0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid #222;
+        }
+        nav .inner {
+            max-width: 800px; margin: 0 auto; padding: 14px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        nav .logo { font-size: 18px; font-weight: 700; }
+        nav .links a { color: #888; font-size: 14px; margin-left: 24px; }
+        .content {
+            max-width: 800px; margin: 0 auto; padding: 120px 24px 80px;
+        }
+        h1 { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
+        .updated { color: #888; font-size: 14px; margin-bottom: 40px; }
+        h2 { font-size: 22px; font-weight: 700; margin-top: 40px; margin-bottom: 12px; }
+        p, ul { margin-bottom: 16px; color: #ccc; }
+        ul { padding-left: 24px; }
+        li { margin-bottom: 6px; }
+        footer {
+            max-width: 800px; margin: 0 auto; padding: 40px 24px;
+            border-top: 1px solid #222; text-align: center;
+            font-size: 12px; color: #555;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="inner">
+            <a class="logo" href="index.html">Amateur Radio Log</a>
+            <div>
+                <a class="links" href="index.html">Home</a>
+                <a class="links" href="https://github.com/amateur-radio-log/app/issues">Support</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>Privacy Policy</h1>
+        <p class="updated">Last updated: March 8, 2026</p>
+
+        <p>Amateur Radio Log ("the App") is designed with your privacy as a priority. This policy explains what data the App collects, how it is used, and your choices.</p>
+
+        <h2>Data Collection</h2>
+        <p>The App does <strong>not</strong> collect, transmit, or share any personal data with us or any third party. We have no servers, no analytics, and no tracking.</p>
+
+        <h2>Data Storage</h2>
+        <p>All data you enter into the App (QSO logs, callsigns, notes, settings) is stored:</p>
+        <ul>
+            <li><strong>Locally on your device</strong> using Apple's SwiftData framework.</li>
+            <li><strong>In your personal iCloud account</strong> (if iCloud is enabled) for syncing across your devices. This data is stored in your private iCloud container and is not accessible to us or anyone else.</li>
+        </ul>
+        <p>Your iCloud data is protected by Apple's encryption and security practices. For details, see <a href="https://support.apple.com/en-us/102651" target="_blank">Apple's iCloud security overview</a>.</p>
+
+        <h2>Third-Party Services</h2>
+        <p>The App can optionally connect to the following third-party services <strong>only when you choose to</strong> and provide your own credentials:</p>
+        <ul>
+            <li><strong>QRZ.com</strong> — for callsign lookups and logbook synchronization. Your QRZ username and password are stored in your device's Keychain and sent directly to QRZ.com's API. We never see these credentials.</li>
+            <li><strong>HamQTH.com</strong> — for callsign lookups. Same as above.</li>
+            <li><strong>ARRL Logbook of the World (LoTW)</strong> — for downloading QSL confirmations. Same as above.</li>
+        </ul>
+        <p>We are not affiliated with QRZ.com, HamQTH.com, or the ARRL. Please review their respective privacy policies for how they handle your data.</p>
+
+        <h2>Credentials</h2>
+        <p>Service credentials (usernames and passwords for QRZ, HamQTH, LoTW) are stored in Apple's Keychain, which provides hardware-backed encryption. Credentials are never stored in plain text, never transmitted to us, and are only sent to the respective service when you initiate a sync or lookup.</p>
+
+        <h2>ADIF Files</h2>
+        <p>When you import or export ADIF files, the App reads from or writes to files you select on your device. These files remain on your device (or in your iCloud Drive if you save them there). We never access these files.</p>
+
+        <h2>Children's Privacy</h2>
+        <p>The App does not knowingly collect any information from children under the age of 13.</p>
+
+        <h2>Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated "Last updated" date.</p>
+
+        <h2>Contact</h2>
+        <p>If you have any questions about this Privacy Policy, please open an issue on our <a href="https://github.com/amateur-radio-log/app/issues" target="_blank">GitHub repository</a>.</p>
+    </div>
+
+    <footer>&copy; 2026 Amateur Radio Log. All rights reserved.</footer>
+</body>
+</html>
