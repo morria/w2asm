@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pocket Cat — Control your HF radio from your phone over Bluetooth</title>
+    <meta name="description" content="Pocket Cat is a tiny BLE-to-USB CAT bridge that lets you control a Yaesu FT-891, FTX-1, or QRP Labs QMX from an iPhone over Bluetooth. Open source hardware and iOS apps — build your own.">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --surface: #161616;
+            --surface2: #1e1e1e;
+            --text: #f0f0f0;
+            --muted: #8a8a8a;
+            --accent: #ff7a1a;
+            --accent-hover: #ff9445;
+            --green: #22c55e;
+            --blue: #3b82f6;
+            --red: #ef4444;
+            --border: #262626;
+            --maxw: 1080px;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { color: var(--accent-hover); }
+        code, .mono {
+            font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', Menlo, monospace;
+            font-size: 0.88em;
+        }
+        code {
+            background: var(--surface2); border: 1px solid var(--border);
+            padding: 1px 6px; border-radius: 5px; color: #ffcfa3;
+        }
+        section { padding: 72px 24px; }
+        .inner { max-width: var(--maxw); margin: 0 auto; }
+        h2 { font-size: clamp(26px, 4vw, 34px); font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
+        h2 .num { color: var(--accent); font-weight: 800; margin-right: 10px; }
+        .section-sub { color: var(--muted); max-width: 640px; margin-bottom: 44px; font-size: 17px; }
+
+        /* Nav */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: rgba(10,10,10,0.82); backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+        }
+        nav .inner {
+            padding: 13px 24px; display: flex; justify-content: space-between; align-items: center;
+        }
+        nav .logo { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: -0.2px; }
+        nav .logo .mark { width: 28px; height: 28px; border-radius: 7px; }
+        nav .links { display: flex; gap: 26px; align-items: center; }
+        nav .links a { color: var(--muted); font-size: 14px; }
+        nav .links a:hover { color: var(--text); }
+        @media (max-width: 640px) { nav .links a.hide-sm { display: none; } }
+
+        /* Hero */
+        .hero { text-align: center; padding: 150px 24px 60px; background: radial-gradient(1000px 500px at 50% -10%, #1a1206 0%, var(--bg) 60%); }
+        .hero .kicker {
+            display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
+            text-transform: uppercase; color: var(--accent); border: 1px solid #3a2410;
+            background: #180f05; padding: 5px 14px; border-radius: 999px; margin-bottom: 26px;
+        }
+        .hero h1 { font-size: clamp(34px, 6vw, 62px); font-weight: 850; letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 20px; }
+        .hero h1 span { color: var(--accent); }
+        .hero p.lede { font-size: clamp(17px, 2.3vw, 21px); color: var(--muted); max-width: 640px; margin: 0 auto 34px; }
+        .cta-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+        .cta { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 12px; font-size: 16px; font-weight: 600; transition: transform .15s, background .15s; }
+        .cta:hover { transform: translateY(-2px); }
+        .cta-primary { background: var(--accent); color: #140a02; }
+        .cta-primary:hover { color: #140a02; background: var(--accent-hover); }
+        .cta-secondary { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+        .cta-secondary:hover { color: var(--text); border-color: #3a3a3a; }
+        .cta svg { width: 18px; height: 18px; }
+
+        /* System diagram (hero) */
+        .sysdiagram { max-width: 860px; margin: 56px auto 0; }
+        .sysdiagram svg { width: 100%; height: auto; display: block; }
+
+        /* Feature grid */
+        .alt { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+        .card { background: var(--surface2); border: 1px solid var(--border); border-radius: 16px; padding: 26px; }
+        .alt .card { background: var(--bg); }
+        .card .ico { width: 42px; height: 42px; border-radius: 11px; background: #1c1204; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; border: 1px solid #33230f; }
+        .card .ico svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.8; }
+        .card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .card p { color: var(--muted); font-size: 15px; }
+
+        /* Radio chips */
+        .radios { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+        .radio { flex: 1 1 220px; background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
+        .alt .radio { background: var(--bg); }
+        .radio .name { font-weight: 700; font-size: 17px; display: flex; align-items: center; gap: 9px; }
+        .radio .dot { width: 9px; height: 9px; border-radius: 50%; }
+        .radio .status { font-size: 13px; color: var(--muted); margin-top: 6px; }
+        .radio .desc { font-size: 14px; color: var(--muted); margin-top: 10px; }
+
+        /* Architecture strip */
+        .archwrap svg { width: 100%; height: auto; max-width: 900px; display: block; margin: 8px auto 0; }
+        .arch-note { text-align: center; color: var(--muted); font-size: 15px; margin-top: 22px; max-width: 620px; margin-left: auto; margin-right: auto; }
+
+        /* Build steps */
+        .steps { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+        .step { display: grid; grid-template-columns: 54px 1fr; gap: 22px; padding: 26px 0; border-top: 1px solid var(--border); }
+        .step:first-child { border-top: none; }
+        .step .n { font-size: 22px; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+        .step h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .step p { color: var(--muted); font-size: 15.5px; margin-bottom: 10px; }
+        .step .detail { font-size: 14px; }
+        .check { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--green); background: #0d1a10; border: 1px solid #16351f; padding: 5px 12px; border-radius: 8px; margin-top: 6px; }
+        .check svg { width: 14px; height: 14px; }
+
+        /* Callout */
+        .callout { border-radius: 14px; padding: 18px 20px; margin: 18px 0; font-size: 14.5px; display: flex; gap: 14px; align-items: flex-start; }
+        .callout svg { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; }
+        .callout.danger { background: #1e0d0d; border: 1px solid #3a1717; }
+        .callout.danger svg { stroke: var(--red); }
+        .callout.danger b { color: #ff8f8f; }
+        .callout.info { background: #0c1220; border: 1px solid #1b2942; }
+        .callout.info svg { stroke: var(--blue); }
+        .callout.info b { color: #9dc0ff; }
+        .callout p { color: #cfcfcf; }
+
+        /* Tables */
+        .tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; margin-top: 8px; }
+        table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+        th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+        th { background: var(--surface2); color: var(--muted); font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+        tr:last-child td { border-bottom: none; }
+        td .qty { display: inline-block; min-width: 20px; text-align: center; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 0 6px; font-weight: 700; color: var(--accent); font-size: 13px; }
+
+        /* Wiring diagram */
+        .wiring { margin-top: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 28px; }
+        .wiring svg { width: 100%; height: auto; display: block; }
+        .legend { display: flex; gap: 22px; flex-wrap: wrap; justify-content: center; margin-top: 18px; font-size: 13.5px; color: var(--muted); }
+        .legend span { display: inline-flex; align-items: center; gap: 8px; }
+        .legend i { width: 22px; height: 3px; border-radius: 2px; display: inline-block; }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--border); padding: 46px 24px; text-align: center; color: var(--muted); font-size: 14px; }
+        footer .fl { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
+        footer a { color: var(--muted); }
+        footer a:hover { color: var(--text); }
+        .disclaimer { font-size: 12.5px; max-width: 620px; margin: 14px auto 0; color: #666; }
+
+        svg text { font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="inner">
+        <a class="logo" href="/">
+            <img class="mark" src="icon.png" alt="Pocket Cat" width="28" height="28">
+            Pocket Cat
+        </a>
+        <div class="links">
+            <a href="#do" class="hide-sm">What it does</a>
+            <a href="#how" class="hide-sm">How it works</a>
+            <a href="#build">Build one</a>
+            <a href="https://github.com/morria/pocket-cat">GitHub</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+    <span class="kicker">Open hardware &amp; iOS apps for amateur radio</span>
+    <h1>Control your HF radio<br>from your <span>phone.</span></h1>
+    <p class="lede">Pocket Cat is a matchbox-sized Bluetooth bridge that plugs into your
+    transceiver's USB CAT port. Frequency, mode, power, memories, even a live
+    panadapter — all from an iPhone in your pocket, no cables to the operator.</p>
+    <div class="cta-group">
+        <a class="cta cta-primary" href="#build">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Build your own
+        </a>
+        <a class="cta cta-secondary" href="#do">See what it does</a>
+    </div>
+
+    <div class="sysdiagram">
+        <svg viewBox="0 0 860 220" role="img" aria-label="iPhone connects over Bluetooth to the Pocket Cat bridge, which connects over USB to the radio">
+            <!-- phone -->
+            <g>
+                <rect x="30" y="46" width="92" height="128" rx="16" fill="#1e1e1e" stroke="#333" stroke-width="1.5"/>
+                <rect x="40" y="60" width="72" height="88" rx="6" fill="#0a0a0a"/>
+                <path d="M52 132 L64 116 L74 124 L88 100 L100 132 Z" fill="#22c55e" opacity="0.85"/>
+                <line x1="52" y1="132" x2="100" y2="132" stroke="#22c55e" stroke-width="1"/>
+                <circle cx="76" cy="160" r="4" fill="#333"/>
+                <text x="76" y="196" fill="#8a8a8a" font-size="13" text-anchor="middle" font-weight="600">iPhone app</text>
+            </g>
+            <!-- BLE waves -->
+            <g stroke="#ff7a1a" fill="none" stroke-width="2" stroke-linecap="round">
+                <path d="M150 110 q14 -14 28 0" opacity="0.5"/>
+                <path d="M144 110 q20 -22 40 0" opacity="0.7"/>
+                <path d="M138 110 q26 -30 52 0" opacity="1"/>
+            </g>
+            <text x="215" y="86" fill="#ff7a1a" font-size="12.5" text-anchor="middle" font-weight="700">Bluetooth LE</text>
+            <text x="215" y="146" fill="#666" font-size="11.5" text-anchor="middle">bonded &amp; encrypted</text>
+            <!-- bridge -->
+            <g>
+                <rect x="300" y="66" width="150" height="88" rx="14" fill="#161616" stroke="#ff7a1a" stroke-width="1.8"/>
+                <rect x="320" y="88" width="110" height="44" rx="8" fill="#1e1e1e" stroke="#333"/>
+                <text x="375" y="110" fill="#f0f0f0" font-size="13" text-anchor="middle" font-weight="700">ESP32-S3</text>
+                <text x="375" y="126" fill="#8a8a8a" font-size="10.5" text-anchor="middle">CATBridge-XXXX</text>
+                <text x="375" y="184" fill="#8a8a8a" font-size="13" text-anchor="middle" font-weight="600">Pocket Cat bridge</text>
+            </g>
+            <!-- USB -->
+            <g stroke="#3b82f6" stroke-width="2.5">
+                <line x1="450" y1="110" x2="560" y2="110"/>
+            </g>
+            <rect x="492" y="98" width="26" height="24" rx="4" fill="#0a0a0a" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="505" y="86" fill="#3b82f6" font-size="12.5" text-anchor="middle" font-weight="700">USB host</text>
+            <text x="505" y="146" fill="#666" font-size="11.5" text-anchor="middle">CAT + I/Q</text>
+            <!-- radio -->
+            <g>
+                <rect x="560" y="56" width="270" height="108" rx="14" fill="#1e1e1e" stroke="#333" stroke-width="1.5"/>
+                <rect x="576" y="74" width="150" height="50" rx="6" fill="#0a0a0a"/>
+                <text x="651" y="98" fill="#ff7a1a" font-size="15" text-anchor="middle" font-weight="700" font-family="ui-monospace, monospace">14.074.00</text>
+                <text x="651" y="114" fill="#8a8a8a" font-size="10.5" text-anchor="middle" font-family="ui-monospace, monospace">USB · 20 W</text>
+                <circle cx="762" cy="86" r="13" fill="#161616" stroke="#3a3a3a" stroke-width="1.5"/>
+                <circle cx="798" cy="86" r="13" fill="#161616" stroke="#3a3a3a" stroke-width="1.5"/>
+                <circle cx="762" cy="120" r="9" fill="#161616" stroke="#3a3a3a" stroke-width="1.5"/>
+                <circle cx="798" cy="120" r="9" fill="#161616" stroke="#3a3a3a" stroke-width="1.5"/>
+                <text x="695" y="152" fill="#8a8a8a" font-size="13" text-anchor="middle" font-weight="600">HF transceiver</text>
+            </g>
+        </svg>
+    </div>
+</header>
+
+<!-- ============ WHAT IT DOES ============ -->
+<section id="do">
+    <div class="inner">
+        <h2>What you can do with it</h2>
+        <p class="section-sub">The bridge is a transparent pipe; all the radio smarts live in a native
+        iOS app. That means a real, typed, fast interface — not a terminal.</p>
+        <div class="grid">
+            <div class="card">
+                <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg></div>
+                <h3>Tune &amp; operate</h3>
+                <p>Frequency, mode, RF power, and PTT with a dead-man failsafe. Drag the
+                digits to spin the VFO; tap to key in a frequency in kHz.</p>
+            </div>
+            <div class="card">
+                <div class="ico"><svg viewBox="0 0 24 24"><path d="M3 16l4-6 3 4 4-8 3 6 4-3"/><path d="M3 20h18"/></svg></div>
+                <h3>Live panadapter</h3>
+                <p>On the QMX, stream raw I/Q over the link and watch a real-time spectrum
+                and waterfall on the phone — band activity at a glance.</p>
+            </div>
+            <div class="card">
+                <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+                <h3>Every menu, explained</h3>
+                <p>Browse the radio's whole configuration tree with a plain-English
+                explanation for each item — discovered live, so it always matches your firmware.</p>
+            </div>
+            <div class="card">
+                <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
+                <h3>Save &amp; restore setups</h3>
+                <p>Capture the radio's full state to a profile in iCloud Drive, diff it
+                against the live rig, and apply it back — your Field Day config in one tap.</p>
+            </div>
+            <div class="card">
+                <div class="ico"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="3"/><path d="M11 6h2"/></svg></div>
+                <h3>Truly portable</h3>
+                <p>Battery-powered and pocket-sized. Sit across the room from a hot rig, or
+                run it off a QRP setup in the field — no laptop, no wires to you.</p>
+            </div>
+            <div class="card">
+                <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                <h3>Safe by design</h3>
+                <p>The link can key a transmitter, so it requires an encrypted, bonded
+                pairing, and drops PTT automatically if the connection goes quiet.</p>
+            </div>
+        </div>
+
+        <h2 style="margin-top:64px">Supported radios</h2>
+        <p class="section-sub">Adding a radio is a software change — the firmware never learns CAT.</p>
+        <div class="radios">
+            <div class="radio">
+                <div class="name"><span class="dot" style="background:#22c55e"></span>Yaesu FT-891</div>
+                <div class="status">Full app · operate, meters, all 159 menu items, profiles</div>
+                <div class="desc">Yaesu ASCII CAT over a CP2105 USB UART.</div>
+            </div>
+            <div class="radio">
+                <div class="name"><span class="dot" style="background:#22c55e"></span>Yaesu FTX-1</div>
+                <div class="status">Bridge working · app in progress</div>
+                <div class="desc">Same Yaesu CAT, reached through the radio's internal USB hub.</div>
+            </div>
+            <div class="radio">
+                <div class="name"><span class="dot" style="background:#22c55e"></span>QRP Labs QMX</div>
+                <div class="status">Full app · operate, live menu tree, panadapter, profiles</div>
+                <div class="desc">Kenwood TS-480 subset over native USB CDC. Needs a USB-A host lead — see the build notes.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how" class="alt">
+    <div class="inner archwrap">
+        <h2 style="text-align:center">How it works</h2>
+        <p class="section-sub" style="margin:0 auto 36px; text-align:center">A dumb pipe by design. The bridge shuttles bytes; the phone owns every
+        radio decision — so a new radio is a Swift change, not a firmware one.</p>
+        <svg viewBox="0 0 900 260" role="img" aria-label="Architecture: iOS app owns CAT logic, the firmware is a transparent byte pipe over BLE and USB">
+            <!-- app column -->
+            <rect x="20" y="40" width="250" height="180" rx="16" fill="#161616" stroke="#ff7a1a" stroke-width="1.6"/>
+            <text x="145" y="70" fill="#ff7a1a" font-size="14" text-anchor="middle" font-weight="800">iOS app — the brains</text>
+            <g fill="#1e1e1e" stroke="#333">
+                <rect x="42" y="86" width="206" height="30" rx="7"/>
+                <rect x="42" y="122" width="206" height="30" rx="7"/>
+                <rect x="42" y="158" width="206" height="30" rx="7"/>
+                <rect x="42" y="194" width="206" height="18" rx="6" fill="#141414"/>
+            </g>
+            <text x="145" y="106" fill="#e8e8e8" font-size="12.5" text-anchor="middle">CAT dialects · command encode/parse</text>
+            <text x="145" y="142" fill="#e8e8e8" font-size="12.5" text-anchor="middle">polling · state model · failsafe</text>
+            <text x="145" y="178" fill="#e8e8e8" font-size="12.5" text-anchor="middle">menus · profiles · panadapter DSP</text>
+            <text x="145" y="206" fill="#8a8a8a" font-size="10.5" text-anchor="middle">CATBridgeKit (Swift)</text>
+
+            <!-- BLE link -->
+            <text x="330" y="120" fill="#ff7a1a" font-size="12" text-anchor="middle" font-weight="700">BLE</text>
+            <g stroke="#ff7a1a" stroke-width="2" marker-end="url(#a)"><line x1="272" y1="130" x2="388" y2="130"/></g>
+            <g stroke="#555" stroke-width="1.4" stroke-dasharray="4 4"><line x1="388" y1="150" x2="272" y2="150"/></g>
+            <text x="330" y="168" fill="#666" font-size="10.5" text-anchor="middle">raw bytes</text>
+
+            <!-- bridge column -->
+            <rect x="390" y="40" width="220" height="180" rx="16" fill="#161616" stroke="#333" stroke-width="1.6"/>
+            <text x="500" y="70" fill="#8a8a8a" font-size="14" text-anchor="middle" font-weight="800">Bridge — a byte pipe</text>
+            <g fill="#1e1e1e" stroke="#333">
+                <rect x="410" y="86" width="180" height="30" rx="7"/>
+                <rect x="410" y="122" width="180" height="30" rx="7"/>
+                <rect x="410" y="158" width="180" height="30" rx="7"/>
+                <rect x="410" y="194" width="180" height="18" rx="6" fill="#141414"/>
+            </g>
+            <text x="500" y="106" fill="#e8e8e8" font-size="12.5" text-anchor="middle">BLE GATT server</text>
+            <text x="500" y="142" fill="#e8e8e8" font-size="12.5" text-anchor="middle">baud · line state · failsafe</text>
+            <text x="500" y="178" fill="#e8e8e8" font-size="12.5" text-anchor="middle">USB host — CDC / CP210x</text>
+            <text x="500" y="206" fill="#8a8a8a" font-size="10.5" text-anchor="middle">ESP-IDF (C) — no CAT knowledge</text>
+
+            <!-- USB link -->
+            <text x="670" y="120" fill="#3b82f6" font-size="12" text-anchor="middle" font-weight="700">USB</text>
+            <g stroke="#3b82f6" stroke-width="2" marker-end="url(#b)"><line x1="612" y1="130" x2="726" y2="130"/></g>
+            <g stroke="#555" stroke-width="1.4" stroke-dasharray="4 4"><line x1="726" y1="150" x2="612" y2="150"/></g>
+
+            <!-- radio column -->
+            <rect x="728" y="60" width="150" height="140" rx="16" fill="#1e1e1e" stroke="#333" stroke-width="1.6"/>
+            <text x="803" y="90" fill="#e8e8e8" font-size="14" text-anchor="middle" font-weight="800">Radio</text>
+            <rect x="748" y="106" width="110" height="40" rx="7" fill="#0a0a0a"/>
+            <text x="803" y="131" fill="#ff7a1a" font-size="13" text-anchor="middle" font-family="ui-monospace, monospace">CAT port</text>
+            <text x="803" y="172" fill="#8a8a8a" font-size="10.5" text-anchor="middle">FT-891 · FTX-1 · QMX</text>
+
+            <defs>
+                <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#ff7a1a"/></marker>
+                <marker id="b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#3b82f6"/></marker>
+            </defs>
+        </svg>
+        <p class="arch-note">Because frequency, band, and mode live only in the app, the same firmware
+        drives any radio — and a new one never touches the C code.</p>
+    </div>
+</section>
+
+<!-- ============ BUILD ============ -->
+<section id="build">
+    <div class="inner">
+        <h2>Build your own</h2>
+        <p class="section-sub">A complete unit is about a dozen parts, ~23 g of filament, and an
+        afternoon. Everything is open source — firmware, iOS apps, and the printable case.</p>
+
+        <div class="callout info">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <p><b>You'll need:</b> a 3D printer (PETG), a temperature-controlled soldering
+            iron, a multimeter, and a Mac with Xcode for the app. The full walkthrough — with
+            checkpoints at every stage — lives in
+            <a href="https://github.com/morria/pocket-cat/blob/main/BUILD.md">BUILD.md</a>.</p>
+        </div>
+
+        <!-- BOM -->
+        <h3 style="font-size:22px; font-weight:700; margin:44px 0 6px">Bill of materials</h3>
+        <p class="section-sub" style="margin-bottom:16px">Per unit. Full part numbers, dimensions, and substitution notes are in
+        <a href="https://github.com/morria/pocket-cat/blob/main/BOM.md">BOM.md</a>.</p>
+        <div class="tablewrap">
+            <table>
+                <thead><tr><th>Qty</th><th>Part</th><th>Notes</th></tr></thead>
+                <tbody>
+                    <tr><td><span class="qty">1</span></td><td>Seeed XIAO ESP32-S3</td><td>Must be the version with the <b>U.FL antenna connector</b> — there is no onboard antenna</td></tr>
+                    <tr><td><span class="qty">1</span></td><td>FPC antenna, 2.4 GHz, 37 × 18 mm</td><td>Ships with the XIAO; mounts in the lid recess</td></tr>
+                    <tr><td><span class="qty">1</span></td><td>LiPo cell, 602535, 3.7 V 500 mAh</td><td>25 × 37 × 6 mm; the JST plug gets cut off</td></tr>
+                    <tr><td><span class="qty">1</span></td><td>TPS61023 boost module</td><td>Adafruit MiniBoost or clone — <b>do not fit the pin header</b></td></tr>
+                    <tr><td><span class="qty">1</span></td><td>Slide switch, SS12F15G5</td><td>SPDT, upstream of both loads</td></tr>
+                    <tr><td><span class="qty">1</span></td><td>M3 × 10 socket-head screw + nut</td><td>Closes the case; snug only</td></tr>
+                    <tr><td>~500 mm</td><td>26 AWG stranded wire, 2 colours</td><td>Seven ~60 mm runs, twisted in pairs</td></tr>
+                    <tr><td><span class="qty">1</span></td><td>USB cable to the radio</td><td>Type &amp; length depend on the rig's CAT port</td></tr>
+                    <tr><td>~23 g</td><td>PETG filament</td><td>Two printed parts, 4 walls / 25 % infill</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="callout info">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <p><b>Also needed, but not part of the unit:</b> a USB-to-UART dongle for flashing.
+            The native USB-C port runs in host mode for the radio, so the console and bootloader
+            live on UART0 — easy to forget when ordering.</p>
+        </div>
+
+        <!-- WIRING DIAGRAM -->
+        <h3 style="font-size:22px; font-weight:700; margin:52px 0 6px">Wiring diagram</h3>
+        <p class="section-sub" style="margin-bottom:16px">Seven runs. The switch sits upstream of <b>both</b> the board and the boost,
+        so switching off also kills the boost — that keeps its 5 V from back-feeding a PC's
+        USB when you plug in to reflash.</p>
+        <div class="wiring">
+            <svg viewBox="0 0 820 380" role="img" aria-label="Wiring diagram: LiPo cell through a slide switch to the XIAO BAT pads and the boost converter, boost 5 volts to XIAO VUSB">
+                <!-- ===== components ===== -->
+                <!-- LiPo cell -->
+                <rect x="40" y="150" width="150" height="90" rx="12" fill="#1e1e1e" stroke="#3a3a3a" stroke-width="1.5"/>
+                <text x="115" y="178" fill="#e8e8e8" font-size="14" text-anchor="middle" font-weight="700">LiPo cell</text>
+                <text x="115" y="196" fill="#8a8a8a" font-size="11" text-anchor="middle">3.7 V · 500 mAh</text>
+                <circle cx="190" cy="172" r="5" fill="#ef4444"/><text x="205" y="176" fill="#ef4444" font-size="12" font-weight="700">+</text>
+                <circle cx="190" cy="218" r="5" fill="#9aa0a6"/><text x="205" y="222" fill="#9aa0a6" font-size="12" font-weight="700">−</text>
+
+                <!-- Slide switch -->
+                <rect x="300" y="40" width="140" height="80" rx="12" fill="#1e1e1e" stroke="#ff7a1a" stroke-width="1.6"/>
+                <text x="370" y="70" fill="#ff7a1a" font-size="14" text-anchor="middle" font-weight="700">Slide switch</text>
+                <text x="370" y="88" fill="#8a8a8a" font-size="11" text-anchor="middle">master power</text>
+                <circle cx="300" cy="100" r="5" fill="#ef4444"/><text x="286" y="104" fill="#ef4444" font-size="11" text-anchor="end">com</text>
+                <circle cx="440" cy="100" r="5" fill="#ef4444"/><text x="454" y="104" fill="#ef4444" font-size="11">out</text>
+
+                <!-- Boost -->
+                <rect x="560" y="40" width="150" height="96" rx="12" fill="#1e1e1e" stroke="#3a3a3a" stroke-width="1.5"/>
+                <text x="635" y="70" fill="#e8e8e8" font-size="14" text-anchor="middle" font-weight="700">Boost 3.7→5 V</text>
+                <text x="635" y="88" fill="#8a8a8a" font-size="11" text-anchor="middle">TPS61023</text>
+                <circle cx="560" cy="108" r="5" fill="#ef4444"/><text x="546" y="112" fill="#ef4444" font-size="11" text-anchor="end">Vin</text>
+                <circle cx="560" cy="128" r="5" fill="#9aa0a6"/><text x="546" y="132" fill="#9aa0a6" font-size="11" text-anchor="end">GND</text>
+                <circle cx="710" cy="108" r="5" fill="#ff7a1a"/><text x="724" y="112" fill="#ff7a1a" font-size="11">5V</text>
+                <circle cx="710" cy="128" r="5" fill="#9aa0a6"/><text x="724" y="132" fill="#9aa0a6" font-size="11">G</text>
+
+                <!-- XIAO -->
+                <rect x="300" y="250" width="220" height="110" rx="14" fill="#161616" stroke="#3b82f6" stroke-width="1.6"/>
+                <text x="410" y="284" fill="#3b82f6" font-size="15" text-anchor="middle" font-weight="800">XIAO ESP32-S3</text>
+                <text x="410" y="302" fill="#8a8a8a" font-size="11" text-anchor="middle">underside pads</text>
+                <circle cx="300" cy="330" r="5" fill="#ef4444"/><text x="286" y="334" fill="#ef4444" font-size="11" text-anchor="end">BAT+</text>
+                <circle cx="300" cy="348" r="5" fill="#9aa0a6"/><text x="286" y="352" fill="#9aa0a6" font-size="11" text-anchor="end">BAT−</text>
+                <circle cx="520" cy="330" r="5" fill="#ff7a1a"/><text x="534" y="334" fill="#ff7a1a" font-size="11">VUSB</text>
+                <circle cx="520" cy="348" r="5" fill="#9aa0a6"/><text x="534" y="352" fill="#9aa0a6" font-size="11">GND</text>
+
+                <!-- ===== wires ===== -->
+                <g fill="none" stroke-width="2.4" stroke-linecap="round">
+                    <!-- cell+ -> switch com (red) -->
+                    <path d="M195 172 L250 172 L250 100 L295 100" stroke="#ef4444"/>
+                    <!-- switch out -> XIAO BAT+ (red) -->
+                    <path d="M445 100 L490 100 L490 200 L250 200 L250 330 L295 330" stroke="#ef4444"/>
+                    <!-- switch out -> Boost Vin (red) -->
+                    <path d="M445 100 L490 100 L490 108 L555 108" stroke="#ef4444"/>
+                    <!-- cell- -> XIAO BAT- (grey) -->
+                    <path d="M195 218 L230 218 L230 348 L295 348" stroke="#9aa0a6"/>
+                    <!-- cell- -> Boost GND (grey) -->
+                    <path d="M195 218 L230 218 L230 240 L540 240 L540 128 L555 128" stroke="#9aa0a6"/>
+                    <!-- boost 5V -> XIAO VUSB (orange) -->
+                    <path d="M715 108 L760 108 L760 330 L525 330" stroke="#ff7a1a"/>
+                    <!-- boost GND -> XIAO GND (grey) -->
+                    <path d="M715 128 L740 128 L740 348 L525 348" stroke="#9aa0a6"/>
+                </g>
+                <!-- junction dots -->
+                <g fill="#ef4444"><circle cx="490" cy="100" r="3.5"/></g>
+                <g fill="#9aa0a6"><circle cx="230" cy="218" r="3.5"/></g>
+            </svg>
+            <div class="legend">
+                <span><i style="background:#ef4444"></i> Battery + / switched power</span>
+                <span><i style="background:#ff7a1a"></i> Boost 5 V → VUSB</span>
+                <span><i style="background:#9aa0a6"></i> Ground</span>
+            </div>
+        </div>
+
+        <div class="callout danger">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <p><b>Two things that will bite you.</b> Cut the LiPo's JST plug off <b>one lead
+            at a time</b> — cutting both together shorts the cell through your cutters, and a
+            500 mAh pouch will happily weld them. And <b>measure the boost output before it
+            touches the microcontroller</b>: switch on, confirm it reads 5 V on a meter, and
+            only then solder it to VUSB.</p>
+        </div>
+
+        <!-- STEPS -->
+        <h3 style="font-size:22px; font-weight:700; margin:52px 0 10px">Step by step</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="n">1</div>
+                <div>
+                    <h3>Print the case</h3>
+                    <p>Two parts, no supports — <code>pocket_cat_base.stl</code> and
+                    <code>pocket_cat_lid.stl</code>. PETG, 0.2 mm layers, 4 walls, 25 % infill.
+                    Both are pre-oriented; slice as exported.</p>
+                    <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>The lid's skirt slides inside the base walls.</span>
+                </div>
+            </div>
+            <div class="step">
+                <div class="n">2</div>
+                <div>
+                    <h3>Flash the firmware — before assembly</h3>
+                    <p>The programming pads face into the case once it's built, so flash first.
+                    Wire a USB-UART dongle to GPIO43/44, then
+                    <code>idf.py set-target esp32s3 &amp;&amp; idf.py flash</code>. The firmware and
+                    every test build with no hardware.</p>
+                    <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>It advertises as <code>CATBridge-XXXX</code> in a BLE scanner.</span>
+                </div>
+            </div>
+            <div class="step">
+                <div class="n">3</div>
+                <div>
+                    <h3>Solder the wiring</h3>
+                    <p>Seven runs, ~60 mm each, twisted in pairs (loop area is what radiates into
+                    the receiver). Follow the diagram above — cell to switch, switch to the BAT
+                    pads and boost input, boost 5 V to VUSB. Hot-glue the BAT joints; those pads lift.</p>
+                    <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Switch on: the LED lights and it advertises. Switch off: all dark.</span>
+                </div>
+            </div>
+            <div class="step">
+                <div class="n">4</div>
+                <div>
+                    <h3>Assemble the case</h3>
+                    <p>Antenna into its bay, switch on its pegs, board into the lid pocket
+                    connector-first, boost into its cradle. Lay the cell in loose — never glue it,
+                    and leave the 1 mm swelling gap clear. Close with the M3 from underneath, snug only.</p>
+                    <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Nothing protrudes; the USB-C port is centred in its aperture.</span>
+                </div>
+            </div>
+            <div class="step">
+                <div class="n">5</div>
+                <div>
+                    <h3>Build &amp; install the app</h3>
+                    <p>Pick the app for your radio, set your Apple signing team, and run to your
+                    iPhone: <code>xcodegen generate</code>, then build in Xcode or from the command
+                    line. A built-in simulator runs the whole app with no hardware, so you can try
+                    it before the parts even arrive.</p>
+                    <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>The app launches and finds "Simulated" in the connection sheet.</span>
+                </div>
+            </div>
+            <div class="step">
+                <div class="n">6</div>
+                <div>
+                    <h3>First contact</h3>
+                    <p>Plug the bridge into the radio's CAT port, power both on, and open the app.
+                    It pairs, probes the baud rate, identifies the rig, and goes live — frequency and
+                    mode on screen a moment later.</p>
+                    <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Turn the dial on the app — the radio follows.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-group" style="justify-content:flex-start; margin-top:44px">
+            <a class="cta cta-primary" href="https://github.com/morria/pocket-cat/blob/main/BUILD.md">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                Full build guide
+            </a>
+            <a class="cta cta-secondary" href="https://github.com/morria/pocket-cat">Source on GitHub</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="fl">
+        <a href="https://github.com/morria/pocket-cat">GitHub</a>
+        <a href="https://github.com/morria/pocket-cat/blob/main/BUILD.md">Build guide</a>
+        <a href="https://github.com/morria/pocket-cat/blob/main/BOM.md">Bill of materials</a>
+        <a href="/">w2asm.com</a>
+    </div>
+    <p>Pocket Cat is open-source hardware and software for licensed amateur radio operators.</p>
+    <p class="disclaimer">This device connects to a transmitter. Operate only within your license
+    privileges and local regulations, and into a proper antenna or dummy load. Lithium cells
+    require care — follow the wiring order in the build guide.</p>
+</footer>
+
+</body>
+</html>
